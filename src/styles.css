@@ -1,0 +1,50 @@
+body {
+    background: #0f0f0f;
+    color: #f5f5f5;
+    font-family: system-ui, sans-serif;
+  }
+  
+  .card {
+    background: #1b1b1b;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+  
+  .card h2 {
+    margin-top: 0;
+  }
+  
+  .row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  input, select, button {
+    background: #111;
+    color: #fff;
+    border: 1px solid #333;
+    padding: 8px 10px;
+    border-radius: 6px;
+  }
+  
+  button {
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background: #222;
+  }
+  
+  .status-matched {
+    color: #4caf50;
+  }
+  
+  .status-tolerance {
+    color: #ff9800;
+  }
+  
+  .status-blocked {
+    color: #f44336;
+  }
