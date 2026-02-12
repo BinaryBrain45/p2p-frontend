@@ -60,13 +60,16 @@ const Dashboard = () => {
 
   return (
     <div className="container mt-4">
-      <h1 className="mb-4">Procure-to-Pay (P2P) Dashboard</h1>
+      {/* --- FIX IS HERE: Added style={{ color: 'black' }} --- */}
+      <h1 className="mb-4" style={{ color: 'black', fontWeight: 'bold' }}>
+        Procure-to-Pay (P2P) Dashboard
+      </h1>
       
       <FileUploader onUploadSuccess={fetchData} />
 
       {/* Existing: List of Pending Invoices */}
       <div className="card mb-4 bg-white">
-        <div className="card-header">Pending Invoices</div>
+        <div className="card-header text-dark font-weight-bold">Pending Invoices</div>
         <div className="card-body">
             {invoices.length === 0 ? (
                 <p className="text-center text-muted">No invoices found. Use the Demo Tools above.</p>
@@ -74,18 +77,18 @@ const Dashboard = () => {
                 <table className="table table-hover">
                     <thead>
                         <tr>
-                            <th>Invoice #</th>
-                            <th>PO #</th>
-                            <th>Amount</th>
-                            <th>Action</th>
+                            <th className="text-dark">Invoice #</th>
+                            <th className="text-dark">PO #</th>
+                            <th className="text-dark">Amount</th>
+                            <th className="text-dark">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         {invoices.map(inv => (
                             <tr key={inv.invoiceNumber}>
-                                <td>{inv.invoiceNumber}</td>
-                                <td>{inv.poNumber}</td>
-                                <td>${inv.billedAmount}</td>
+                                <td className="text-dark">{inv.invoiceNumber}</td>
+                                <td className="text-dark">{inv.poNumber}</td>
+                                <td className="text-dark">${inv.billedAmount}</td>
                                 <td>
                                     <button 
                                         className="btn btn-primary btn-sm"
