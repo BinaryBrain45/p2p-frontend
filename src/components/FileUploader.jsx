@@ -27,7 +27,7 @@ const FileUploader = ({ onUploadSuccess }) => {
     return (
         <div className="card mb-4 bg-white text-dark shadow-sm">
             <div className="card-header bg-dark text-white">
-                📂 Bulk Upload Center (Real-Life Simulation)
+                📂 Transaction Entry Module
             </div>
             <div className="card-body">
                 <div className="row">

@@ -35,4 +35,4 @@ It validates payments by comparing three critical documents:
 * **Backend API Code:** [Link to your Backend GitHub Repo]
 
 ---
-*Built by [Your Name] - 2026*
+*Built by Jaya Prakash - 2026*
