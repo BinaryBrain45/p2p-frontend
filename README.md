@@ -31,8 +31,8 @@ It validates payments by comparing three critical documents:
 * **DevOps:** CI/CD Pipelines via GitHub Actions (Vercel/Render).
 
 ## 📂 Repository Links
-* **Frontend Code:** [Current Repo]
-* **Backend API Code:** [Link to your Backend GitHub Repo]
+* **Frontend Code:** [\[Current Repo\]](https://github.com/BinaryBrain45/p2p-frontend)
+* **Backend API Code:** [\[Backend GitHub Repo\]](https://github.com/BinaryBrain45/p2p-backend)
 
 ---
 *Built by Jaya Prakash - 2026*
