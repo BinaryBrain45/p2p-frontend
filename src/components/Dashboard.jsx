@@ -11,7 +11,6 @@ const Dashboard = () => {
   const [selectedInvoice, setSelectedInvoice] = useState(null);
   const [selectedPO, setSelectedPO] = useState(null);
   const [selectedGRN, setSelectedGRN] = useState(null);
-  const [matchResult, setMatchResult] = useState(null);
 
   // Load Data on Startup
   useEffect(() => {
@@ -33,25 +32,28 @@ const Dashboard = () => {
     }
   };
 
-  // When user clicks "View" on an invoice
   const handleSelectInvoice = (invoice) => {
     setSelectedInvoice(invoice);
-    setMatchResult(null); // Reset previous results
-
-    // Find related PO
     const relatedPO = pos.find(po => po.poNumber === invoice.poNumber);
     setSelectedPO(relatedPO);
-
-    // Find related GRN (Assumes GRN also references the same PO)
     const relatedGRN = grns.find(grn => grn.poNumber === invoice.poNumber);
     setSelectedGRN(relatedGRN);
   };
 
-  // Call your backend Match Logic
+  // --- NEW: Function to remove invoice from list after decision ---
+  const handleProcessComplete = (invoiceId) => {
+    // 1. Remove the processed invoice from the list (UI Only)
+    setInvoices(prev => prev.filter(inv => inv.invoiceNumber !== invoiceId));
+    
+    // 2. Close the comparison view
+    setSelectedInvoice(null);
+    setSelectedPO(null);
+    setSelectedGRN(null);
+  };
+
   const handleRunMatch = async (invoiceId) => {
     try {
       const res = await runMatch(invoiceId);
-      setMatchResult(res.data);
       alert("Backend Match Result: " + JSON.stringify(res.data));
     } catch (error) {
       alert("Error running match logic");
@@ -60,38 +62,39 @@ const Dashboard = () => {
 
   return (
     <div className="container mt-4">
-      {/* --- FIX IS HERE: Added style={{ color: 'black' }} --- */}
       <h1 className="mb-4" style={{ color: 'black', fontWeight: 'bold' }}>
         Procure-to-Pay (P2P) Dashboard
       </h1>
       
       <FileUploader onUploadSuccess={fetchData} />
 
-      {/* Existing: List of Pending Invoices */}
-      <div className="card mb-4 bg-white">
-        <div className="card-header text-dark font-weight-bold">Pending Invoices</div>
+      {/* Pending Invoices List */}
+      <div className="card mb-4 bg-white shadow-sm">
+        <div className="card-header bg-light text-dark font-weight-bold">
+            Pending Invoices ({invoices.length})
+        </div>
         <div className="card-body">
             {invoices.length === 0 ? (
-                <p className="text-center text-muted">No invoices found. Use the Demo Tools above.</p>
+                <p className="text-center text-muted p-3">🎉 All tasks completed! No pending invoices.</p>
             ) : (
-                <table className="table table-hover">
-                    <thead>
+                <table className="table table-hover mb-0">
+                    <thead className="thead-light">
                         <tr>
-                            <th className="text-dark">Invoice #</th>
-                            <th className="text-dark">PO #</th>
-                            <th className="text-dark">Amount</th>
-                            <th className="text-dark">Action</th>
+                            <th>Invoice #</th>
+                            <th>PO #</th>
+                            <th>Amount</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         {invoices.map(inv => (
                             <tr key={inv.invoiceNumber}>
-                                <td className="text-dark">{inv.invoiceNumber}</td>
-                                <td className="text-dark">{inv.poNumber}</td>
-                                <td className="text-dark">${inv.billedAmount}</td>
+                                <td className="align-middle">{inv.invoiceNumber}</td>
+                                <td className="align-middle">{inv.poNumber}</td>
+                                <td className="align-middle">${inv.billedAmount}</td>
                                 <td>
                                     <button 
-                                        className="btn btn-primary btn-sm"
+                                        className="btn btn-primary btn-sm px-3"
                                         onClick={() => handleSelectInvoice(inv)}
                                     >
                                         Analyze Match
@@ -105,13 +108,14 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Existing: The 3-Way Match Visualizer */}
+      {/* 3-Way Match Visualizer */}
       {selectedInvoice && (
         <ThreeWayComparison 
             invoice={selectedInvoice}
             po={selectedPO}
             grn={selectedGRN}
             onMatch={handleRunMatch}
+            onProcessComplete={handleProcessComplete} // <-- Passing the new function
         />
       )}
     </div>
