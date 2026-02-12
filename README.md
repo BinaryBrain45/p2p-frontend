@@ -1,16 +1,38 @@
-# React + Vite
+# 🚀 AI-Powered Procure-to-Pay (P2P) Matching Engine
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### **Live Demo:** [CLICK HERE TO OPEN APP](https://p2p-frontend-woad.vercel.app/)
 
-Currently, two official plugins are available:
+![Java](https://img.shields.io/badge/Backend-Java%20Spring%20Boot-red)
+![React](https://img.shields.io/badge/Frontend-React.js-blue)
+![Database](https://img.shields.io/badge/Database-H2%20In--Memory-green)
+![Deployment](https://img.shields.io/badge/Cloud-Vercel%20%2B%20Render-orange)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 📖 Project Overview
+This is a full-stack financial reconciliation system designed to automate the **3-Way Matching Process** used in enterprise ERP systems (like SAP/Oracle). 
 
-## React Compiler
+It validates payments by comparing three critical documents:
+1.  **Purchase Order (PO):** What we ordered.
+2.  **Goods Receipt (GRN):** What we actually received.
+3.  **Vendor Invoice:** What we are being charged.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🧠 Key Features & Algorithms
+* **Dual-Tolerance Verification:** Implements a smart logic that auto-approves minor discrepancies based on:
+    * **Percentage Rule:** Allows variance up to **2%** of the total value.
+    * **Hard Cap Rule:** Maximum allowed variance is **$50.00**.
+    * *Logic:* The system applies whichever limit is stricter to prevent overpayment.
+* **Real-Time Validation:** React Frontend calculates potential matches instantly before sending data to the backend.
+* **Microservices Architecture:** * **Frontend:** Hosted on Vercel (React).
+    * **Backend:** Hosted on Render (Java Spring Boot REST API).
 
-## Expanding the ESLint configuration
+## 🛠️ Tech Stack
+* **Frontend:** React.js, Axios, Bootstrap, CSS3.
+* **Backend:** Java 17, Spring Boot 3, Hibernate/JPA.
+* **Database:** H2 (In-Memory for demo speed).
+* **DevOps:** CI/CD Pipelines via GitHub Actions (Vercel/Render).
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 📂 Repository Links
+* **Frontend Code:** [Current Repo]
+* **Backend API Code:** [Link to your Backend GitHub Repo]
+
+---
+*Built by [Your Name] - 2026*
