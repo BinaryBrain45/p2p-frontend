@@ -1,9 +1,16 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 const ThreeWayComparison = ({ invoice, po, grn, onMatch }) => {
+  // NEW: State for the "Simulation" buttons
+  const [manualStatus, setManualStatus] = useState(null); // null, 'APPROVED', 'REJECTED'
+
+  // Reset the status whenever a new invoice is selected
+  useEffect(() => {
+    setManualStatus(null);
+  }, [invoice]);
+
   // If data is missing, show a loading state
   if (!invoice || !po) return <div className="text-muted">Waiting for selection...</div>;
-
 
   // 1. CALCULATE EXPECTED VALUES
   const expectedTotal = invoice.billedQty * po.unitPrice;
@@ -24,12 +31,19 @@ const ThreeWayComparison = ({ invoice, po, grn, onMatch }) => {
 
   // 4. QUANTITY CHECK
   const receivedQty = grn ? grn.receivedQty : 0;
-  // Note: Usually invoice qty should be <= received qty. 
-  // If invoice bills for 10 but we received 5, that is a block.
   const isQtyMatch = invoice.billedQty <= receivedQty;
 
   // 5. OVERALL STATUS
   const isOverallMatch = isPriceMatch && isQtyMatch;
+
+  // --- NEW: HANDLE BUTTON CLICKS ---
+  const handleDecision = (decision) => {
+    // 1. Show alert (Simulation)
+    alert(`SIMULATION: Invoice #${invoice.invoiceNumber} has been ${decision}. \n(In a real app, this would update the ERP database).`);
+    
+    // 2. Update UI State
+    setManualStatus(decision);
+  };
 
   return (
     <div className="card shadow-sm p-4 mb-4 bg-white">
@@ -111,26 +125,77 @@ const ThreeWayComparison = ({ invoice, po, grn, onMatch }) => {
         </div>
       </div>
 
-      {/* --- ACTION AREA --- */}
-      <div className="mt-4 text-center">
-        {isOverallMatch ? (
-          <div className={`alert ${isPerfectPrice ? 'alert-success' : 'alert-warning'}`}>
-            {isPerfectPrice 
-                ? "✅ MATCH SUCCESSFUL: Ready for Payment" 
-                : "⚠️ MATCH APPROVED (TOLERANCE): Small variance detected but auto-approved."}
-          </div>
-        ) : (
-          <div className="alert alert-danger">
-            🛑 <strong>MATCH FAILED:</strong> Payment Blocked
-          </div>
-        )}
+      {/* --- ACTION AREA (UPDATED) --- */}
+      <div className="mt-4 text-center border-top pt-4">
         
-        <button 
-            className="btn btn-dark btn-lg"
-            onClick={() => onMatch(invoice.invoiceNumber)}
-        >
-            Run Backend Verification
-        </button>
+        {/* If user hasn't decided yet, show the Analysis Result */}
+        {!manualStatus && (
+            <>
+                {isOverallMatch ? (
+                    <div className={`alert ${isPerfectPrice ? 'alert-success' : 'alert-warning'}`}>
+                        {isPerfectPrice 
+                            ? "✅ SYSTEM MATCH: Ready for Payment" 
+                            : "⚠️ SYSTEM MATCH (TOLERANCE): Auto-Approved by Rules."}
+                    </div>
+                ) : (
+                    <div className="alert alert-danger">
+                        🛑 <strong>SYSTEM BLOCK:</strong> Discrepancy Detected. Manager Approval Required.
+                    </div>
+                )}
+            </>
+        )}
+
+        {/* --- THE NEW BUTTONS --- */}
+        <div className="d-flex justify-content-center gap-3 mt-3">
+            
+            {/* Show Buttons only if no decision made yet */}
+            {!manualStatus && (
+                <>
+                    <button 
+                        className="btn btn-success btn-lg px-4"
+                        onClick={() => handleDecision('APPROVED')}
+                    >
+                        ✅ Approve Payment
+                    </button>
+
+                    <button 
+                        className="btn btn-danger btn-lg px-4"
+                        style={{ marginLeft: '15px' }} // Spacing
+                        onClick={() => handleDecision('REJECTED')}
+                    >
+                        ❌ Decline Invoice
+                    </button>
+                </>
+            )}
+
+            {/* Show Result Badge after decision */}
+            {manualStatus === 'APPROVED' && (
+                <div className="alert alert-success w-100">
+                    <h3>✅ INVOICE APPROVED</h3>
+                    <p>Payment scheduled for processing.</p>
+                </div>
+            )}
+
+            {/* Show Result Badge after decision */}
+            {manualStatus === 'REJECTED' && (
+                <div className="alert alert-danger w-100">
+                    <h3>❌ INVOICE REJECTED</h3>
+                    <p>Vendor has been notified of the discrepancy.</p>
+                </div>
+            )}
+
+        </div>
+
+        {/* Keep the backend button as a 'Debug' option at the very bottom */}
+        {!manualStatus && (
+             <button 
+                className="btn btn-outline-secondary btn-sm mt-4"
+                onClick={() => onMatch(invoice.invoiceNumber)}
+            >
+                (Debug) Run Backend Verification
+            </button>
+        )}
+
       </div>
     </div>
   );
