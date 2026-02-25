@@ -25,10 +25,9 @@ It validates payments by comparing three critical documents:
     * **Backend:** Hosted on Render (Java Spring Boot REST API).
 
 ## 🛠️ Tech Stack
-* **Frontend:** React.js, Axios, Bootstrap, CSS3.
+* **Frontend:** Angular.
 * **Backend:** Java 17, Spring Boot 3, Hibernate/JPA.
 * **Database:** H2 (In-Memory for demo speed).
-* **DevOps:** CI/CD Pipelines via GitHub Actions (Vercel/Render).
 
 ## 📂 Repository Links
 * **Frontend Code:** [\[Current Repo\]](https://github.com/BinaryBrain45/p2p-frontend)
